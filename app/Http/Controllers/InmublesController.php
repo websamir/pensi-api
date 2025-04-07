@@ -18,7 +18,7 @@ class InmublesController extends Controller
 {
 
     /**
-     * Crud generos 
+     * Crud generos
      */
     public function generos()
     {
@@ -58,7 +58,7 @@ class InmublesController extends Controller
         ];
         return response()->json($data, 201);
     }
-    
+
     public function show_genero($id)
     {
 
@@ -671,7 +671,7 @@ class InmublesController extends Controller
             "porcentaje_descuento" => "sometimes|numeric|between:0,100",
             "precio_descuento" => "sometimes|numeric|between:0,999999999.99",
             "habitaciones" => "required|integer",
-            "id_genero" => "required|integer|exists:genero,id_genero",
+            "id_genero" => "required|integer|exists:generos,id_genero",
             "descripcion" => "required|string",
             "destacado" => "sometimes|integer|between:0,1",
             "link" => "required|string|url|max:255",
@@ -826,7 +826,7 @@ class InmublesController extends Controller
             "porcentaje_descuento" => "sometimes|numeric|between:0,100",
             "precio_descuento" => "sometimes|numeric|between:0,999999999.99",
             "habitaciones" => "required|integer",
-            "id_genero" => "required|integer|exists:genero,id_genero",
+            "id_genero" => "required|integer|exists:generos,id_genero",
             "descripcion" => "required|string",
             "destacado" => "sometimes|integer|between:0,1",
             "link" => "required|string|url|max:255",
@@ -885,7 +885,7 @@ class InmublesController extends Controller
             "porcentaje_descuento" => "numeric|between:0,100",
             "precio_descuento" => "numeric|between:0,999999999.99",
             "habitaciones" => "integer",
-            "id_genero" => "integer|exists:genero,id_genero",
+            "id_genero" => "integer|exists:generos,id_genero",
             "descripcion" => "string",
             "destacado" => "integer|between:0,1"
 
@@ -921,7 +921,7 @@ class InmublesController extends Controller
         if ($request->has('destacado')) {
             $inmueble->destacado = $request->get('destacado', 0);
         }
-        
+
         if ($request->has('precio_descuento')) {
             $inmueble->precio_descuento = $request->get('precio_descuento', 0);
         }
@@ -1008,7 +1008,7 @@ class InmublesController extends Controller
         foreach ($request->file('fotos') as $foto) {
             $folderPath = 'inmuebles/' . $request->inmueble_id;
             $path = $foto->store($folderPath, 'public'); // Asegúrate de especificar 'public' como el segundo argumento
-    
+
             $url = Storage::url($path);
             Foto::create([
                 'id_inmueble' => $request->inmueble_id,
@@ -1195,7 +1195,7 @@ class InmublesController extends Controller
         }
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:4096'
-            
+
         ]);
 
         try {
@@ -1255,7 +1255,7 @@ class InmublesController extends Controller
             if ($request->has('etiqueta')) {
                 $noti->etiqueta = $request->etiqueta;
             }
-            
+
             if ($request->has('link')) {
                 $noti->link = $request->link;
             }
@@ -1293,7 +1293,7 @@ class InmublesController extends Controller
             "search" => "required|string",
 
         ]);
-        
+
         $query = Inmueble::query();
 
 
@@ -1349,14 +1349,14 @@ class InmublesController extends Controller
 
         if ($request->has('hubicacion')) {
             $hubicacion = $request->hubicacion;
-        
+
             $query->where(function ($query) use ($hubicacion) {
                 $query->where('region', 'LIKE', "%$hubicacion%")
                       ->orWhere('pais', 'LIKE', "%$hubicacion%")
                       ->orWhere('ciudad', 'LIKE', "%$hubicacion%");
             });
         }
-        
+
 
         // Filtrar por número de habitaciones
         if ($request->has('min_habitaciones') && $request->has('max_habitaciones')) {
@@ -1381,7 +1381,7 @@ class InmublesController extends Controller
             $query->where('id_genero', $request->id_genero);
         }
 
-        //filtro por servicios extra 
+        //filtro por servicios extra
         if ($request->has('id_servicio_extra')) {
             $servicioExtraId = $request->id_servicio_extra;
             $query->whereHas('servicios_ex', function ($subquery) use ($servicioExtraId) {
@@ -1400,10 +1400,10 @@ class InmublesController extends Controller
         // Filtrar por medida (metros cuadrados)
         if ($request->has('metros')) {
             $metros = intval($request->metros);
-        
+
             $query->whereRaw('CAST(medida AS SIGNED) <= ?', [$metros]);
         }
-        
+
 
 
         $inmuebles = $query->get();

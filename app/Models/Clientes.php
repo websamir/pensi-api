@@ -13,7 +13,8 @@ class Clientes extends Authenticatable implements JWTSubject
     use HasFactory;
 
     protected $table = 'clientes';
-  
+    
+
     protected $fillable = [
         'tipo_identidad',
         'numero_identidad',
@@ -30,7 +31,7 @@ class Clientes extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-       
+
     ];
 
     /**
@@ -58,7 +59,7 @@ class Clientes extends Authenticatable implements JWTSubject
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT
-     * 
+     *
      * @return array
      */
     public function getJWTCustomClaims(){

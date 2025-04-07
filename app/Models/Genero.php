@@ -10,7 +10,7 @@ class Genero extends Model
 {
     use HasFactory;
 
-    protected $table = 'genero';
+    protected $table = 'generos';
     protected $primaryKey = 'id_genero';
     protected $fillable = [
         'descripcion',
@@ -21,5 +21,5 @@ class Genero extends Model
         return $this->hasMany(Inmueble::class, 'id_genero');
     }
 
-    
+
 }
