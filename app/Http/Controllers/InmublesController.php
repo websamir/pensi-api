@@ -635,7 +635,7 @@ class InmublesController extends Controller
         $user = auth()->user();
 
         if (!$user || $user->admin != 1) {
-            $inmuebles = Inmueble::with(['servicios_ex.servicio_ex', 'servicios.servicio', 'fotos', 'genero', 'usuario'])->where('estado', 1)->orderByDesc('created_at')->get();
+            $inmuebles = Inmueble::with(['servicios_ex.servicio_ex', 'servicios.servicio', 'fotos', 'genero', 'usuario'])->where('estado', 1)->->whereHas('fotos')->orderByDesc('created_at')->get();
         }else{
             $inmuebles = Inmueble::with(['servicios_ex.servicio_ex', 'servicios.servicio', 'fotos', 'genero', 'usuario'])->orderByDesc('created_at')->get();
         }
